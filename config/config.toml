@@ -1,0 +1,18 @@
+welcome = "Welcome to iris framework!"
+
+[api]
+
+
+[app]
+  debug = false
+  host = "127.0.0.1"
+  name = "iris-app"
+  port = 8086
+
+  [app.logger]
+    format = "2006/01/02 15:04:05"
+    level = "debug"
+    name = "application"
+  [app.upload]
+     allowSuffix=["png","jpg"]
+     allowDir = "./uploads/"
