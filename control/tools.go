@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"mime/multipart"
 	"os"
+	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
@@ -138,18 +139,19 @@ func UploadFile(ctx iris.Context) {
 	}
 	defer file.Close()
 	if checkFileIsImage(info) {
-		_, err1 := os.Open("./uploads")
+		_, err1 := os.Open(saveFilePath)
 		if err1 != nil {
 			os.Mkdir(saveFilePath, 0660)
 		}
-		destFile := saveFilePath + strconv.FormatInt(time.Now().Unix(), 10) + "_" + info.Filename
+		//destFile := saveFilePath + strconv.FormatInt(time.Now().Unix(), 10) + "_" + info.Filename
+		destFile := filepath.Join(saveFilePath,strconv.FormatInt(time.Now().Unix(), 10) + "_" + info.Filename)
+		//utils.Info(destFile1)
 		_, err := ctx.SaveFormFile(info, destFile)
 		if err != nil {
 			ctx.JSON(utils.ResultUtil.Failure(err.Error()))
 		}
 		result, err := service.QrDecode(destFile)
 		if err != nil {
-			utils.Error(err.Error())
 			ctx.JSON(utils.ResultUtil.Failure("failed"))
 		} else {
 			ctx.JSON(utils.ResultUtil.Success(result))

@@ -26,11 +26,23 @@
 	 }
 
  }
+ //如果使用身份验证，可以在这统一进行
+ //func before(ctx iris.Context) {
+ 	//通过检查，接着继续操作，不通过直接拒绝
+	// aa :=ctx.GetHeader("aaa")
+	// if aa=="11"{
+	// 	ctx.Next()
+	// }else {
+	// 	ctx.JSON(iris.StatusBadGateway)
+	// }
+ //}
     func main() {
         app := iris.New()
         app.Use(recover.New())
         app.Use(logger.New())
         app.Logger().SetLevel("info")
+        //全局注册before
+        //app.UseGlobal(before)
         router(app)
 		uri := fmt.Sprintf("%s:%d",
 			config.Conf.Get("app.host").(string),
